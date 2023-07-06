@@ -1,0 +1,139 @@
+API data schemas
+
+
+
+endpoint functionality
+
+/			On Load
+			Auth login
+			BoardMetaData List (trending)
+				- GET top 3 trending boards and display list of clickable links
+
+/trending	On Load
+			BoardMetaData List (trending)
+				- GET top n trending boards  and display list of clickable links
+
+/boards		On Load
+			BoardMetaData List (recent)
+				- GET user's list of recent boards and display list of clickable links
+			BoardMetaData List (owned by user)
+				- GET user's list of owned boards and display list of clickable links
+
+			User Actions
+			Create a Board
+				- display form for user inputs: name and description (can be blank)
+				- POST boardname, board description, userID
+				- server side finds unused boardID, creates new BoardMetaData object with blank or default thumbnail and returns to client as response
+				- client enters board window if no error
+
+/board/<BoardID> 	On Load
+					BoardSchema
+						- GET BoardSchema from BoardID from BoardMetaData from link
+					BoardMetaData
+						- client PUTS BoardSchema update to server periodically when changes are detected
+						- also updates name and description of BoardMetaData
+						- ownership update triggers independently on change
+					
+					User Actions
+					Create HTML preview widget
+						- create an iframe and offer URL input field
+						- GET html from URL and store in widget and display
+					Refresh button in HTML preview
+						- GET html from stored URL and replace stored html
+					Duplicate
+						- spawn a new iframe with same content properties in new widget position
+
+
+
+Database Tables
+
+BoardSchema {
+	BoardID (int),
+	Widgets (Array<Widget>),
+		Widget { // common attributes for all widgets ie. html preview, text, graphic, etc.
+			widget window size, 
+			widget position in board,
+			content type,
+			(additional attributes depending on content type)
+		
+
+			Content types:
+
+			html preview {
+				URL, 
+				HTML,
+				preview scroll (x, y),
+				preview zoom, 
+				preview view position
+			}
+
+			text: {
+				font,
+				fontsize,
+				plaintext,
+			}
+
+			graphic: { //similar to HTML, merge into one type or not necessary?
+				URL or PATH, (web or local resource)
+				preview scroll (x, y),
+				preview zoom, 
+				preview view position
+			}  
+		}
+}
+
+BoardMetaData {
+	*BoardID,
+	BoardName,
+	BoardDescription,
+	OwnedBy,
+	Thumbnail
+}
+
+BoardOwnership {
+	UserID,
+	BoardID
+}
+
+RecentViewedBoards {
+	UserID,
+	BoardID, 
+	LastAccessDate
+} //set number limit per user?
+
+
+
+Extra
+
+BoardViews {
+	*BoardID,
+	*UserID,
+	VisitCount
+}
+aggregate log(VisitCount) grouped by boardID for board score
+aggregate log(VisitCount) grouped by UserID to determine user impact?
+	- users that have high view counts on a small number of boards may imply boards they choose to visit are better quality
+	- exclude 1 visit boards from statistics, but 2+ visits implies proof of utility
+
+Popularity  {
+	BoardID,
+	score
+}
+
+
+
+
+
+Miscellaneous
+Server recalculates trending sparsely, once every 10+ minutes?
+Also update if a viewcount update threshold is reached before regular update triggers?
+
+
+Discussion
+
+Should thumbnails be computed client-side or server-side?
+Allow clients to upload their own thumbnails?
+
+With the addition of ownership and recently viewed tables, we've reached our required 4 schemas without the view count and trending list, they can be relegated to extra features
+
+
