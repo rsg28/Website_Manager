@@ -1,0 +1,14 @@
+{
+  "name": "storm-board",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "test": " "
+  },
+  "repository": {
+    "type": "git",
+    "url": " "
+  },
+  "keywords": [],
+  "author": "Group 6"
+}
