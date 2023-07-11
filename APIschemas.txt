@@ -61,23 +61,23 @@ BoardSchema {
 
 			html preview {
 				URL, 
-				HTML,
+				HTML, // We don't save HTML, unneeded?
 				preview scroll (x, y),
-				preview zoom, 
-				preview view position
+				preview zoom,
+				preview view position // Not needed?
 			}
 
 			text: {
 				font,
-				fontsize,
-				plaintext,
+				fontsize, 
+				plaintext, 
 			}
 
 			graphic: { //similar to HTML, merge into one type or not necessary?
 				URL or PATH, (web or local resource)
 				preview scroll (x, y),
 				preview zoom, 
-				preview view position
+				preview view position // Not needed?
 			}  
 		}
 }
