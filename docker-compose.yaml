@@ -6,6 +6,10 @@ services:
         working_dir: /app
         volumes:
         - ./backend:/app
+        environment:
+            PORT: 3000
+            MONGO_CONNECTION_STRING: mongodb://root:password@db:27017/stormboard?authSource=admin
+
     frontend:
         build: backend
         restart: always
@@ -16,9 +20,12 @@ services:
     db:
         image: mongo
         restart: always
+        ports:
+        - 27017:27017
         environment:
             MONGO_INITDB_ROOT_USERNAME: root
             MONGO_INITDB_ROOT_PASSWORD: password
+
     nginx:
         image: nginx:alpine
         restart: always
