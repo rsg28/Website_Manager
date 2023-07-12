@@ -1,0 +1,248 @@
+body {
+  background-color: #282c34;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='24' viewBox='0 0 12 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23403939' fill-opacity='0.4'%3E%3Cpath d='M2 0h2v12H2V0zm1 20c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM9 8c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm-1 4h2v12H8V12z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  margin: 0;
+  font-family: "Belanosima", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.landing-page {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding-top: 60px;
+}
+
+#menuIcon {
+  position: fixed;
+  top: 0px;
+  left: 20px;
+  cursor: pointer;
+  z-index: 1000; /* Ensure the icon is above other elements */
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #262626;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 2;
+}
+
+header.show {
+  opacity: 1;
+}
+
+.landing-page img {
+  height: 20px; /* Adjust this value to change the size of the image */
+  width: auto;
+  margin-right: auto; /* Pushes the image to the left */
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2em;
+  justify-content: center; 
+}
+
+.button-box {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+  border: 2px solid #fff; /* Border color */
+  border-radius: 10px; /* Rounded corners */
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Shadow for a "cool" effect */
+  position: relative; /* Added to position the pseudo-element */
+}
+
+.button-box::after {
+  content: "";
+  position: absolute;
+  width: 1px; /* Width of the line */
+  height: 100%; /* Height of the line */
+  background: #fff; /* Color of the line */
+  top: 50%; /* Position the line in the middle vertically */
+  left: 50%; /* Position the line in the middle horizontally */
+  transform: translate(-50%, -50%); /* Center the line */
+}
+
+.button-box button {
+  font-family: "Ubuntu", sans-serif;
+  font-size: 1.3em;
+  color: #e8e0d9;
+  background-color: transparent;
+  border: none;
+  transition: color 0.4s ease;
+  padding: 10px 20px;
+  font-weight: bold;
+  text-align: center; 
+}
+
+.button-box button:hover {
+  color: #fffdd0;
+  cursor: pointer;
+}
+
+.button-container button {
+  font-family: "Ubuntu", sans-serif;
+  font-size: 1.3em;
+  color: #e8e0d9;
+  background-color: transparent;
+  border: none;
+  transition: color 0.4s ease;
+  padding: 10px 20px;
+  font-weight: bold;
+}
+
+.button-container button:hover {
+  color: #fffdd0;
+  cursor: pointer;
+}
+
+
+main {
+  text-align: center;
+}
+
+.landing-page p,
+header,
+.trending-boards {
+  transition: opacity 2s ease-in-out;
+  opacity: 0;
+}
+
+.landing-page p.show,
+header.show,
+.trending-boards.show {
+  opacity: 1;
+}
+
+.landing-page h1 {
+  font-family: "Ubuntu", sans-serif;
+  font-size: 12em;
+  margin-top: 4em;
+  margin-bottom: 0em;
+  background: -webkit-linear-gradient(45deg, #061b38 30%, #7d98a1 90%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.landing-page p {
+  font-size: 1.2em;
+  margin-bottom: 5em;
+  transition: opacity 1.5s ease-in-out;
+  opacity: 0;
+}
+
+.landing-page p.show {
+  opacity: 1;
+}
+
+.trending-boards {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2em;
+  background-color: #4a5568;
+  padding: 20px;
+  font-family: "Ubuntu", sans-serif;
+}
+
+.trending-boards .Subtitle{
+  font-size: 3em;
+}
+
+.board-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between; /* This will add equal space between your boxes */
+  flex-wrap: wrap; /* This will allow the boxes to wrap to the next line if the container width is too small */
+}
+
+.board {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80px; /* Decreased padding for better appearance */
+  border-radius: 10px;
+  
+  position: relative;
+  margin: 1em 1em 1em 1em; /* top right bottom left */
+  cursor: pointer;
+  background-color: #2d3748;
+}
+
+@media (min-width: 768px) {
+  .board {
+    width: calc((100% / 3) - 2em);
+  }
+}
+
+.board h2 {
+  margin: 0;
+  font-family: "Ubuntu", sans-serif;
+}
+
+.board p {
+  margin: 0;
+}
+
+.board .author {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 10px;
+  background-color: #4a5568;
+  color: #ed8936;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.5s linear;
+}
+
+.board:hover .author {
+  visibility: visible;
+  opacity: 1;
+}
+
+#logoIcon {
+  position: relative;
+  top: 1cm;
+  height: 90px; /* Adjust this value to change the size of the logo */
+  width: auto;
+  margin-left: 10px;
+}
+.see-more {
+  font-family: "Ubuntu", sans-serif;
+  font-size: 1em;
+  color: #fff;
+  background-color: #4a5568;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 20px;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  float: right;
+}
+
+.see-more:hover {
+  background-color: #2d3748;
+}
