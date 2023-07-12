@@ -9,12 +9,21 @@ interface ParamTypes {
   [key: string]: string | undefined;
 }
 
+interface Block {
+  id: number;
+  position: number;
+  left: number;
+  title: string;
+}
+
 const BoardPage: React.FC = () => {
   const { id, title } = useParams<ParamTypes>();
   const boardTitle = title || "Unnamed";
   const boardRef = useRef<HTMLDivElement>(null);
   const { onMouseDown, onMouseMove, onMouseUp } = useDragScroll();
   const [mode, setMode] = useState("drag"); // 'drag' or 'move'
+  const [blocks, setBlocks] = useState<Block[]>([]); // Array to keep track of blocks
+  const [url, setUrl] = useState(""); // State to keep track of entered URL
 
   const handleShare = () => {
     alert(`Sharing ${boardTitle}`);
@@ -36,6 +45,26 @@ const BoardPage: React.FC = () => {
     }
   };
 
+  const addBlock = () => {
+    setBlocks([
+      {
+        id: Date.now(),
+        position: 0,
+        left: blocks.length * 120,
+        title:
+          url.startsWith("http://") || url.startsWith("https://")
+            ? url
+            : `https://${url}`, // Use entered URL as the title
+      },
+      ...blocks,
+    ]);
+    setUrl(""); // Clear the textbox
+  };
+
+  const deleteBlock = (id: number) => {
+    setBlocks(blocks.filter((block) => block.id !== id));
+  };
+
   return (
     <div className="Board-Page">
       <div style={{ display: "flex", alignItems: "center" }}>
@@ -44,6 +73,13 @@ const BoardPage: React.FC = () => {
         </Link>
         <h1>{boardTitle}</h1>
       </div>
+      <input
+        type="text"
+        value={url}
+        onChange={(e) => setUrl(e.target.value)}
+        placeholder="Enter URL"
+      />
+      <button onClick={addBlock}>Submit</button>
       <button onClick={handleShare}>Share</button>
       <br />
       <br />
@@ -58,22 +94,25 @@ const BoardPage: React.FC = () => {
         onMouseUp={onMouseUp}
         onContextMenu={(e) => e.preventDefault()}
       >
-        {Array(50)
-          .fill(null)
-          .map((_, i) => (
-            <Draggable
-              key={i}
-              onStart={handleDragStart}
-              disabled={mode === "move"}
+        {blocks.map((block, i) => (
+          <Draggable
+            key={block.id}
+            onStart={handleDragStart}
+            disabled={mode === "move"}
+          >
+            <div
+              className="draggable-element"
+              style={{ top: `${block.position}px`, left: `${block.left}px` }}
             >
-              <div
-                className="draggable-element"
-                style={{ top: `${i * 120}px`, left: `${i * 120}px` }}
-              >
-                Element {i + 1}
-              </div>
-            </Draggable>
-          ))}
+              <iframe
+                src={block.title}
+                title={block.title}
+                style={{ width: "100%", height: "100%" }}
+              />
+              <button onClick={() => deleteBlock(block.id)}>Delete</button>
+            </div>
+          </Draggable>
+        ))}
       </div>
     </div>
   );

@@ -6,13 +6,16 @@ services:
         working_dir: /app
         volumes:
         - ./backend:/app
+        
     frontend:
-        build: backend
+        build: frontend
         restart: always
-        command: npm run dev
+        command: react-scripts start
         working_dir: /app
         volumes:
         - ./frontend:/app
+        environment:
+            HOST: 0.0.0.0
     db:
         image: mongo
         restart: always
