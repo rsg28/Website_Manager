@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom"; // Import the Link component for routing
 import logo from "./color_transparent.png"; // Import the logo image
 import "./BoardSelector.css";
+import { useAuth0 } from "@auth0/auth0-react";
 
 // Define the type for a board
 interface Board {
@@ -12,6 +13,7 @@ interface Board {
 
 const BoardSelector: React.FC = () => {
   const [showMenu, setShowMenu] = useState(false);
+  const { logout } = useAuth0();
 
   // Function to toggle the visibility of the menu
   const toggleMenu = () => {
@@ -47,9 +49,13 @@ const BoardSelector: React.FC = () => {
           <img src={logo} alt="Logo" id="logoIcon" /> {/* Logo image */}
           <h1>Storm-Board</h1>
         </div>
-        <Link to="/">
-          <button className="logout-button">Logout</button>
-        </Link>
+        <button className="logout-button" onClick={() => logout({
+          openUrl(url) {
+            const redirectURL = `${url}&returnTo=${encodeURIComponent(window.location.origin)}`;
+            window.location.replace(redirectURL);
+          }
+        }) 
+        }>Logout</button>
       </div>
       <main id="boardSelector">
         <button className="new-board-button">Create New Board</button>

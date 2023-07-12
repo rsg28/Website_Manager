@@ -2,10 +2,17 @@ import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import "./LandingPage.css";
 import logo from "./color_transparent.png";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const LandingPage: React.FC = () => {
   const descriptionRef = useRef<HTMLParagraphElement>(null);
   const trendingBoardsRef = useRef<HTMLDivElement>(null);
+  const { loginWithRedirect, user } = useAuth0();
+
+  // Redirect user to board if logged in
+  if (user) {
+    window.location.href = "/board";
+  }
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -44,9 +51,7 @@ const LandingPage: React.FC = () => {
         </p>
         <div className="button-container">
           <div className="button-box">
-            <Link to="/board" className="login-button">
-            <button className="signin-button">Sign in </button>
-            </Link>
+            <button className="signin-button" onClick={() => loginWithRedirect()}>Sign in </button>
             <button className="signup-button">Sign up</button>
           </div>
         </div>
