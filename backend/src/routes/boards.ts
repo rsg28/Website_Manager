@@ -89,7 +89,16 @@ router.put(
     body("thumbnail").notEmpty().isString(),
     body("widgets").notEmpty().isArray(), // TODO: validate widgets
     async (req, res) => {
-        throw new Error("Not implemented");
+        //throw new Error("Not implemented");
+        const board = await db.Board.findByIdAndUpdate(
+            req.body._id,
+            req.body
+        );
+        if (!board) {
+            res.status(404).send("Board update failed");
+            return;
+        }
+        res.send(board);
     }
 );
 
@@ -97,7 +106,13 @@ router.put(
 router.delete(
     "/:id",
     async (req, res) => {
-        throw new Error("Not implemented");
+        //throw new Error("Not implemented");
+        const board = db.Board.findByIdAndDelete(req.body._id);
+        if (!board) {
+            res.status(404).send("Board delete failed");
+            return;
+        }
+        res.send(board);
     }
 );
 
