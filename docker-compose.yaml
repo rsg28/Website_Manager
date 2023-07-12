@@ -6,19 +6,28 @@ services:
         working_dir: /app
         volumes:
         - ./backend:/app
+        environment:
+            PORT: 3000
+            MONGO_CONNECTION_STRING: mongodb://root:password@db:27017/stormboard?authSource=admin
+
     frontend:
-        build: backend
+        build: frontend
         restart: always
-        command: npm run dev
+        command: react-scripts start
         working_dir: /app
         volumes:
         - ./frontend:/app
+        environment:
+            HOST: 0.0.0.0
     db:
         image: mongo
         restart: always
+        ports:
+        - 27017:27017
         environment:
             MONGO_INITDB_ROOT_USERNAME: root
             MONGO_INITDB_ROOT_PASSWORD: password
+
     nginx:
         image: nginx:alpine
         restart: always

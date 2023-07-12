@@ -10,5 +10,9 @@
     "url": " "
   },
   "keywords": [],
-  "author": "Group 6"
+  "author": "Group 6",
+  "dependencies": {
+    "re-resizable": "^6.9.9",
+    "react-resizable": "^3.0.5"
+  }
 }
