@@ -17,7 +17,7 @@ interface Block {
 }
 
 const BoardPage: React.FC = () => {
-  const { id, title } = useParams<ParamTypes>();
+  const { title } = useParams<ParamTypes>();
   const boardTitle = title || "Unnamed";
   const boardRef = useRef<HTMLDivElement>(null);
   const { onMouseDown, onMouseMove, onMouseUp } = useDragScroll();
@@ -26,7 +26,7 @@ const BoardPage: React.FC = () => {
   const [url, setUrl] = useState(""); // State to keep track of entered URL
 
   const handleShare = () => {
-    alert(`Sharing ${boardTitle}`);
+    alert(`TODO: Not implemented`);
   };
 
   const handleDragStart = (e: DraggableEvent, data: DraggableData) => {
@@ -46,19 +46,19 @@ const BoardPage: React.FC = () => {
   };
 
   const addBlock = () => {
+    // TODO: use new proxy when implemented
+    const URLWithProxy = `${window.origin}/api/proxy?url=${encodeURIComponent(url)}`;
+    console.log(URLWithProxy);
     setBlocks([
       {
         id: Date.now(),
         position: 0,
         left: blocks.length * 120,
-        title:
-          url.startsWith("http://") || url.startsWith("https://")
-            ? url
-            : `https://${url}`, // Use entered URL as the title
+        title: URLWithProxy
       },
       ...blocks,
     ]);
-    setUrl(""); // Clear the textbox
+    setUrl(""); 
   };
 
   const deleteBlock = (id: number) => {
@@ -66,26 +66,29 @@ const BoardPage: React.FC = () => {
   };
 
   return (
-    <div className="Board-Page">
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <Link to="/">
-          <img src={logo} alt="Logo" id="logo" />
-        </Link>
-        <h1>{boardTitle}</h1>
+    <div className="Board-Page" style={{width: "100vw", height: "100vh", overflow: "hidden"}}>
+      <div style={{height: "175px"}}>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Link to="/">
+            <img src={logo} alt="Logo" id="logo" />
+          </Link>
+          <h1>{boardTitle}</h1>
+        </div>
+        <input
+          type="text"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          placeholder="Enter URL"
+        />
+        <button onClick={addBlock}>Submit</button>
+        <button onClick={handleShare}>Share</button>
+        <br />
+        <br />
+        <button onClick={() => setMode(mode === "drag" ? "move" : "drag")}>
+          {mode === "drag" ? "Move Board" : "Drag Elements"}
+        </button>
       </div>
-      <input
-        type="text"
-        value={url}
-        onChange={(e) => setUrl(e.target.value)}
-        placeholder="Enter URL"
-      />
-      <button onClick={addBlock}>Submit</button>
-      <button onClick={handleShare}>Share</button>
-      <br />
-      <br />
-      <button onClick={() => setMode(mode === "drag" ? "move" : "drag")}>
-        {mode === "drag" ? "Move Board" : "Drag Elements"}
-      </button>
+
       <div
         className="whiteboard"
         ref={boardRef}
@@ -107,7 +110,7 @@ const BoardPage: React.FC = () => {
               <iframe
                 src={block.title}
                 title={block.title}
-                style={{ width: "100%", height: "100%" }}
+                style={{ width: "calc(100% - 10px)", height: "calc(100% - 50px)", marginTop: "40px"}}
               />
               <button onClick={() => deleteBlock(block.id)}>Delete</button>
             </div>
