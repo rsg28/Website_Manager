@@ -22,7 +22,6 @@ const BoardSelector: React.FC = () => {
 
   useEffect(() => {
     const fetchMetadata = async () => {
-      console.log("META", metadata, "isLoading", isLoading, "isAuthenticated", isAuthenticated);
       if (metadata !== null) {
         return;
       }

@@ -4,6 +4,7 @@ services:
         restart: always
         command: npm run dev
         working_dir: /app
+        target: dev
         volumes:
         - ./backend:/app
         environment:
@@ -16,6 +17,7 @@ services:
         build: frontend
         restart: always
         command: npm run dev
+        target: dev
         working_dir: /app/frontend
         volumes:
         - ./:/app
