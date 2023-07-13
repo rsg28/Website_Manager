@@ -16,8 +16,13 @@ export interface BoardMetadata {
 }
 
 // Handlers
+const userDataCache = new Map<string, string>();
 
 async function getUserID(userAuthorizationHeader: string) {
+    if (userDataCache.has(userAuthorizationHeader)) {
+        return userDataCache.get(userAuthorizationHeader);
+    }
+
     const userInfoRes = await fetch(`${process.env.AUTH0_ISSUER_BASE_URL}userinfo`, {
         headers: {
             "content-type": "application/json",
@@ -25,7 +30,11 @@ async function getUserID(userAuthorizationHeader: string) {
         }
     }); 
 
+    
     const userInfo = await userInfoRes.json();
+    if(userInfo.sub !== undefined) {
+        userDataCache.set(userAuthorizationHeader, userInfo.sub);
+    }
     return userInfo.sub;
 }
 
