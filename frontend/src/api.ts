@@ -5,7 +5,7 @@ export async function createNewBoard(name: string, authToken: string) {
         method: 'POST',
         headers: {
             'content-type': 'application/json',
-            Authorization: authToken
+            Authorization: `Bearer ${authToken}`
         },
         body: JSON.stringify({ name })
     });
@@ -17,7 +17,7 @@ export async function fetchBoard(id: string, authToken: string) {
     const res = await fetch(`/api/boards/${id}`, {
         headers: {
             "content-type": "application/json",
-            Authorization: authToken
+            Authorization: `Bearer ${authToken}`
         }
     });
     const data = await res.json();
@@ -29,7 +29,7 @@ export async function updateBoard(boardId: string, boardData: IBoard, authToken:
         method: 'PUT',
         headers: {
             'content-type': 'application/json',
-            Authorization: authToken
+            Authorization: `Bearer ${authToken}`
         },
         body: JSON.stringify(boardData)
     });
@@ -41,7 +41,7 @@ export async function getBoardMetadata(authToken: string) {
     const res = await fetch('/api/boards', {
         headers: {
             "content-type": "application/json",
-            Authorization: authToken
+            Authorization: `Bearer ${authToken}`
         }
     });
     const data = await res.json();

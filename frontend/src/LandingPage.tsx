@@ -54,7 +54,7 @@ const LandingPage: React.FC = () => {
         <div className="button-container">
           <div className="button-box">
             <button className="signin-button" onClick={() => loginWithRedirect()}>Sign in </button>
-            <button className="signup-button">Sign up</button>
+            <button className="signup-button" onClick={() => loginWithRedirect()}>Sign up</button>
           </div>
         </div>
       </main>

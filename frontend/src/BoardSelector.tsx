@@ -22,6 +22,7 @@ const BoardSelector: React.FC = () => {
 
   useEffect(() => {
     const fetchMetadata = async () => {
+      console.log("META", metadata, "isLoading", isLoading, "isAuthenticated", isAuthenticated);
       if (metadata !== null) {
         return;
       }
@@ -31,9 +32,7 @@ const BoardSelector: React.FC = () => {
         return;
       }
 
-      console.log(accessToken);
       const fetchedMetadata = await api.getBoardMetadata(accessToken);
-      console.log("fetched metadata", fetchedMetadata);
       setMetadata(fetchedMetadata);
     };
 

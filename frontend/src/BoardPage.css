@@ -31,7 +31,7 @@ h1 {
 }
 
 .draggable-element:hover {
-  transform: scale(1.1); /* Increase the size of the block when hovered */
+  transform: scale(1.05); /* Increase the size of the block when hovered */
   z-index: 1; /* Bring the block to the front when hovered */
 }
 
