@@ -13,12 +13,13 @@ services:
     frontend:
         build: frontend
         restart: always
-        command: react-scripts start
+        command: npm run dev
         working_dir: /app
         volumes:
         - ./frontend:/app
         environment:
             HOST: 0.0.0.0
+
     db:
         image: mongo
         restart: always
