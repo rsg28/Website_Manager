@@ -1,3 +1,5 @@
+import * as api from "./api";
+
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom"; // Import the Link component for routing
 import logo from "./color_transparent.png"; // Import the logo image
@@ -13,7 +15,7 @@ interface Board {
 
 const BoardSelector: React.FC = () => {
   const [showMenu, setShowMenu] = useState(false);
-  const { logout, isLoading, isAuthenticated } = useAuth0();
+  const { logout, isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
 
   // Redirect if NOT logged in
   useEffect(() => {
@@ -27,7 +29,6 @@ const BoardSelector: React.FC = () => {
     setShowMenu(!showMenu);
   };
 
-  // This is just dummy data. Replace it with your actual data.
   const recentlySeenBoards: Board[] = [
     { title: "Board 1", author: "Author 1", link: "" },
     { title: "Board 2", author: "Author 2", link: "" },
@@ -65,13 +66,25 @@ const BoardSelector: React.FC = () => {
         }>Logout</button>
       </div>
       <main id="boardSelector">
-        <button className="new-board-button">Create New Board</button>
+        
+        <button className="new-board-button" onClick={async () => {
+          const accessToken = await getAccessTokenSilently();
+          if (!accessToken) {
+            return;
+          }
+
+          const boardName = `New Board - ${new Date().toLocaleString()}`;
+
+          const newBoardId = await api.createNewBoard(boardName, accessToken);
+          window.location.replace(`/boards/${newBoardId}`);
+        }}>Create New Board</button>
+
         <section className="recently-seen">
           <h2>Recently Seen</h2>
           {recentlySeenBoards.map((board, index) => (
             // Render each recently seen board with its title
             <Link
-              to={`/board/${index}/${board.title}`}
+              to={`/boards/${index}/${board.title}`}
               key={index}
               className="Bboard"
             >
@@ -84,7 +97,7 @@ const BoardSelector: React.FC = () => {
           {yourBoards.map((board, index) => (
             // Render each of your boards with its title
             <Link
-              to={`/board/${index}/${board.title}`}
+              to={`/boards/${index}/${board.title}`}
               key={index}
               className="Bboard"
             >

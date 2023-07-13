@@ -41,7 +41,20 @@ const jwtCheck = auth({
 
 app.use(jwtCheck);
 
-app.get("/api/test", (req, res) => {
+app.get("/api/test", async (req, res) => {
+    const testInfo = await fetch(`${process.env.AUTH0_ISSUER_BASE_URL}userinfo`, {
+        headers: {
+            "content-type": "application/json",
+            Authorization: req.headers.authorization!
+        }
+    }); 
+
+    // google-oauth2|113842120758769624140
+
+    const testInfoJson = await testInfo.json();
+    console.log(testInfoJson);
+
+    // console.log(req.auth);
     res.send("Hello World!");
 });
 

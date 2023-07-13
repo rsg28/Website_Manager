@@ -12,7 +12,7 @@ const LandingPage: React.FC = () => {
   // Redirect if logged in
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
-      window.location.replace("/board");
+      window.location.replace("/boards");
     }
   }, [isAuthenticated, isLoading]);
 

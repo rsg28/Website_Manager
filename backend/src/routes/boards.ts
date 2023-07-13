@@ -17,14 +17,21 @@ export interface BoardMetadata {
 
 // Handlers
 
-function getUserID() {
-    // TODO: the user ID will be either provided by a JWT or auth0
-    return "abc123";
+async function getUserID(userJWT: string) {
+    const userInfoRes = await fetch(`${process.env.AUTH0_ISSUER_BASE_URL}userinfo`, {
+        headers: {
+            "content-type": "application/json",
+            Authorization: `Bearer ${userJWT}`
+        }
+    }); 
+
+    const userInfo = await userInfoRes.json();
+    return userInfo.sub;
 }
 
 // Return all metadata for boards owned by the user
 router.get("/", async (req, res) => {
-    const uid = getUserID();
+    const uid = await getUserID(req.headers.authorization!);
 
     const boards = await db.Board.find({ ownedBy: uid });
     
@@ -37,7 +44,6 @@ router.get("/", async (req, res) => {
         } as BoardMetadata;
     });
     
-
     res.send(metadata);
 });
 
@@ -52,7 +58,9 @@ router.post(
             return;
         }
 
-        const uid = getUserID();
+        console.log("here", req.headers.authorization);
+        const uid = await getUserID(req.headers.authorization!);
+        console.log("a", uid);
         
         const board = new db.Board({
             name: req.body.name,
@@ -85,12 +93,21 @@ router.get(
 router.put(
     "/:id",
     body("name").notEmpty().isString(),
-    body("description").notEmpty().isString(),
-    body("thumbnail").notEmpty().isString(),
+    // body("description").notEmpty().isString(), // TODO: re-enable these once validation is done
+    // body("thumbnail").notEmpty().isString(), // TODO: re-enable these once validation is done
     body("widgets").notEmpty().isArray(), // TODO: validate widgets
     async (req, res) => {
+        const validated = validationResult(req);
+        if (!validated.isEmpty()) {
+            res.status(400).send(validated);
+            return;
+        }
+
         const board = await db.Board.findByIdAndUpdate(
-            req.body._id,
+            {
+                _id: req.params?.id ?? "" ,
+                ownedBy: await getUserID(req.headers.authorization!)
+            },
             req.body
         );
         if (!board) {
