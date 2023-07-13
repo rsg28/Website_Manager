@@ -26,7 +26,7 @@ const BoardPage: React.FC = () => {
   const [boardData, setBoardData] = useState<IBoard | null>(null);
 
   // Redirect if NOT logged in
-  useEffect(() => {
+  useEffect(() => { 
     if (!isLoading && !isAuthenticated) {
       window.location.replace("/");
     }
