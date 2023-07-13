@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom"; // Import the Link component for routing
 import logo from "./color_transparent.png"; // Import the logo image
 import "./BoardSelector.css";
@@ -13,7 +13,14 @@ interface Board {
 
 const BoardSelector: React.FC = () => {
   const [showMenu, setShowMenu] = useState(false);
-  const { logout } = useAuth0();
+  const { logout, isLoading, isAuthenticated } = useAuth0();
+
+  // Redirect if NOT logged in
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      window.location.replace("/");
+    }
+  }, [isAuthenticated, isLoading]);
 
   // Function to toggle the visibility of the menu
   const toggleMenu = () => {

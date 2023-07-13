@@ -1,9 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import "./BoardPage.css";
 import logo from "./color_transparent.png";
 import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
 import useDragScroll from "./useDragScroll";
+import { useAuth0 } from "@auth0/auth0-react";
 
 interface ParamTypes {
   [key: string]: string | undefined;
@@ -24,6 +25,13 @@ const BoardPage: React.FC = () => {
   const [mode, setMode] = useState("drag"); // 'drag' or 'move'
   const [blocks, setBlocks] = useState<Block[]>([]); // Array to keep track of blocks
   const [url, setUrl] = useState(""); // State to keep track of entered URL
+  const { isLoading, isAuthenticated } = useAuth0();
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      window.location.replace("/");
+    }
+  }, [isAuthenticated, isLoading]);
 
   const handleShare = () => {
     alert(`TODO: Not implemented`);
