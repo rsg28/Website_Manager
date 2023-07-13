@@ -16,19 +16,22 @@ services:
         build: frontend
         restart: always
         command: npm run dev
-        working_dir: /app
+        working_dir: /app/frontend
         volumes:
-        - ./frontend:/app
+        - ./:/app
         environment:
             HOST: 0.0.0.0
             REACT_APP_AUTH0_DOMAIN: dev-datv3cnf7jn5ysok.us.auth0.com
             REACT_APP_AUTH0_CLIENT_ID: REd3U1UTVr639GXUanZWZnVd6RTqq1nm
             REACT_APP_AUTH0_AUDIENCE: https://h2rk2784-3000.usw2.devtunnels.ms/
+            
     db:
         image: mongo
         restart: always
         ports:
         - 27017:27017
+        volumes:
+        - /tmp/stormboarddb:/data/db
         environment:
             MONGO_INITDB_ROOT_USERNAME: root
             MONGO_INITDB_ROOT_PASSWORD: password
