@@ -2,6 +2,7 @@ import * as db from "./db";
 import boardsRouter from "./routes/boards";
 
 import express from "express";
+import { auth } from "express-oauth2-jwt-bearer";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -9,10 +10,6 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 db.init();
-
-app.get("/api", (req, res) => {
-    res.send("Hi from backend");
-});
 
 // TODO: this is a temporary proxy to get around CORS issues
 // it will have to be completely rewritten to support POST requests and absolute URLs
@@ -35,6 +32,18 @@ app.get('/api/proxy', async (req, res) => {
 });
 
 app.use("/api/boards", boardsRouter);
+
+const jwtCheck = auth({
+    audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+    issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
+    tokenSigningAlg: 'RS256'
+});
+
+app.use(jwtCheck);
+
+app.get("/api/test", (req, res) => {
+    res.send("Hello World!");
+});
 
 app.listen(port, () => {
     console.log("Backend server started");

@@ -12,10 +12,11 @@ const App: React.FC = () => {
   return (
     // Wrap the entire app with the Auth0Provider to handle authentication
     <Auth0Provider
-      domain={'dev-datv3cnf7jn5ysok.us.auth0.com'}
-      clientId={'REd3U1UTVr639GXUanZWZnVd6RTqq1nm'}
+      domain={process.env.REACT_APP_AUTH0_DOMAIN!}
+      clientId={process.env.REACT_APP_AUTH0_CLIENT_ID!}
       authorizationParams={{
-        redirect_uri: window.location.origin
+        redirect_uri: window.location.origin,
+        audience: process.env.REACT_APP_AUTH0_AUDIENCE,
       }}
     >
       {/* Use the BrowserRouter component to enable routing */}
