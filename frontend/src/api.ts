@@ -36,3 +36,14 @@ export async function updateBoard(boardId: string, boardData: IBoard, authToken:
     const data = await res.json();
     return data;
 }
+
+export async function getBoardMetadata(authToken: string) {
+    const res = await fetch('/api/boards', {
+        headers: {
+            "content-type": "application/json",
+            Authorization: authToken
+        }
+    });
+    const data = await res.json();
+    return data;
+}

@@ -35,6 +35,8 @@ router.get("/", async (req, res) => {
 
     const boards = await db.Board.find({ ownedBy: uid });
     
+    console.log(boards, uid);
+
     const metadata: Array<BoardMetadata> = boards.map((board) => {
         return {
             id: board._id.toString(),
