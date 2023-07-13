@@ -31,32 +31,17 @@ app.get('/api/proxy', async (req, res) => {
     }
 });
 
-app.use("/api/boards", boardsRouter);
-
 const jwtCheck = auth({
     audience: process.env.REACT_APP_AUTH0_AUDIENCE,
     issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
     tokenSigningAlg: 'RS256'
 });
 
+// This will make authentication required in all boards
 app.use(jwtCheck);
 
-app.get("/api/test", async (req, res) => {
-    const testInfo = await fetch(`${process.env.AUTH0_ISSUER_BASE_URL}userinfo`, {
-        headers: {
-            "content-type": "application/json",
-            Authorization: req.headers.authorization!
-        }
-    }); 
+app.use("/api/boards", boardsRouter);
 
-    // google-oauth2|113842120758769624140
-
-    const testInfoJson = await testInfo.json();
-    console.log(testInfoJson);
-
-    // console.log(req.auth);
-    res.send("Hello World!");
-});
 
 app.listen(port, () => {
     console.log("Backend server started");

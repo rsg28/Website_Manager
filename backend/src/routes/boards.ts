@@ -17,11 +17,11 @@ export interface BoardMetadata {
 
 // Handlers
 
-async function getUserID(userJWT: string) {
+async function getUserID(userAuthorizationHeader: string) {
     const userInfoRes = await fetch(`${process.env.AUTH0_ISSUER_BASE_URL}userinfo`, {
         headers: {
             "content-type": "application/json",
-            Authorization: `Bearer ${userJWT}`
+            Authorization: userAuthorizationHeader
         }
     }); 
 
@@ -35,8 +35,6 @@ router.get("/", async (req, res) => {
 
     const boards = await db.Board.find({ ownedBy: uid });
     
-    console.log(boards, uid);
-
     const metadata: Array<BoardMetadata> = boards.map((board) => {
         return {
             id: board._id.toString(),
@@ -45,7 +43,7 @@ router.get("/", async (req, res) => {
             thumbnail: board.thumbnail
         } as BoardMetadata;
     });
-    
+
     res.send(metadata);
 });
 
@@ -60,9 +58,7 @@ router.post(
             return;
         }
 
-        console.log("here", req.headers.authorization);
         const uid = await getUserID(req.headers.authorization!);
-        console.log("a", uid);
         
         const board = new db.Board({
             name: req.body.name,
