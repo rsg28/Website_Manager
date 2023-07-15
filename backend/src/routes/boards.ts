@@ -129,7 +129,7 @@ router.put(
 router.delete(
     "/:id",
     async (req, res) => {
-        const board = db.Board.findByIdAndDelete(req.body._id);
+        const board = await db.Board.findByIdAndDelete(req.body._id);
         if (!board) {
             res.status(404).send("Board delete failed");
             return;
