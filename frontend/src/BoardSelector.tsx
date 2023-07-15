@@ -1,40 +1,47 @@
-import React, { useState } from "react";
+import * as api from "./api";
+import {BoardMetadata} from "../../backend/src/routes/boards";
+
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom"; // Import the Link component for routing
 import logo from "./color_transparent.png"; // Import the logo image
 import "./BoardSelector.css";
 import { useAuth0 } from "@auth0/auth0-react";
 
-// Define the type for a board
-interface Board {
-  title: string;
-  author: string;
-  link: string;
-}
 
 const BoardSelector: React.FC = () => {
   const [showMenu, setShowMenu] = useState(false);
-  const { logout } = useAuth0();
+  const { logout, isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const [metadata, setMetadata] = useState<BoardMetadata[] | null>(null);
+
+  // Redirect if NOT logged in
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      window.location.replace("/");
+    }
+  }, [isAuthenticated, isLoading]);
+
+  useEffect(() => {
+    const fetchMetadata = async () => {
+      if (metadata !== null) {
+        return;
+      }
+
+      const accessToken = await getAccessTokenSilently();
+      if (!accessToken) {
+        return;
+      }
+
+      const fetchedMetadata = await api.getBoardMetadata(accessToken);
+      setMetadata(fetchedMetadata);
+    };
+
+    fetchMetadata();
+  }, [metadata, getAccessTokenSilently]);
 
   // Function to toggle the visibility of the menu
   const toggleMenu = () => {
     setShowMenu(!showMenu);
   };
-
-  // This is just dummy data. Replace it with your actual data.
-  const recentlySeenBoards: Board[] = [
-    { title: "Board 1", author: "Author 1", link: "" },
-    { title: "Board 2", author: "Author 2", link: "" },
-    { title: "Board 3", author: "Author 3", link: "" },
-    { title: "Board 4", author: "Author 4", link: "" },
-  ];
-
-  const yourBoards: Board[] = [
-    { title: "Board 5", author: "You", link: "" },
-    { title: "Board 6", author: "You", link: "" },
-    { title: "Board 7", author: "You", link: "" },
-    { title: "Board 8", author: "You", link: "" },
-    { title: "Board 9", author: "You", link: "" },
-  ];
 
   return (
     <div className="board-selector">
@@ -58,33 +65,54 @@ const BoardSelector: React.FC = () => {
         }>Logout</button>
       </div>
       <main id="boardSelector">
-        <button className="new-board-button">Create New Board</button>
-        <section className="recently-seen">
-          <h2>Recently Seen</h2>
-          {recentlySeenBoards.map((board, index) => (
-            // Render each recently seen board with its title
-            <Link
-              to={`/board/${index}/${board.title}`}
-              key={index}
-              className="Bboard"
-            >
-              {board.title}
-            </Link>
-          ))}
-        </section>
-        <section className="your-boards">
-          <h2>Your Boards</h2>
-          {yourBoards.map((board, index) => (
-            // Render each of your boards with its title
-            <Link
-              to={`/board/${index}/${board.title}`}
-              key={index}
-              className="Bboard"
-            >
-              {board.title}
-            </Link>
-          ))}
-        </section>
+        
+        <button className="new-board-button" onClick={async () => {
+          const accessToken = await getAccessTokenSilently();
+          if (!accessToken) {
+            return;
+          }
+
+          const boardName = `New Board - ${new Date().toLocaleString()}`;
+
+          const newBoardId = await api.createNewBoard(boardName, accessToken);
+          window.location.replace(`/boards/${newBoardId}`);
+        }}>Create New Board</button>
+
+        {
+          metadata !== null && metadata.length === 0 ? <h2 style={{color: "#FFFFFF"}}>You have no boards. Click "Create New Board" to start.</h2> 
+          : <>
+            <section className="recently-seen">
+              <h2>Recently Seen</h2>
+              {metadata === null ? <h2>Loading...</h2> : metadata.map((board, index) => {
+                  // Render each recently seen board with its title
+                  return <Link
+                    to={`/boards/${board.id}`}
+                    key={index}
+                    className="Bboard"
+                  >
+                    {board.name}
+                  </Link>  
+                }
+              )}
+            </section>
+            <section className="your-boards">
+              <h2>Your Boards</h2>
+              {metadata === null ? <h2>Loading...</h2> : metadata.map((board, index) => {
+                  // Render each recently seen board with its title
+                  return <Link
+                    to={`/boards/${board.id}`}
+                    key={index}
+                    className="Bboard"
+                  >
+                    {board.name}
+                  </Link>  
+                }
+              )}
+            </section>
+          </>
+        }
+
+       
       </main>
     </div>
   );

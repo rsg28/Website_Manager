@@ -16,15 +16,31 @@ export interface BoardMetadata {
 }
 
 // Handlers
+const userDataCache = new Map<string, string>();
 
-function getUserID() {
-    // TODO: the user ID will be either provided by a JWT or auth0
-    return "abc123";
+async function getUserID(userAuthorizationHeader: string) {
+    if (userDataCache.has(userAuthorizationHeader)) {
+        return userDataCache.get(userAuthorizationHeader);
+    }
+
+    const userInfoRes = await fetch(`${process.env.AUTH0_ISSUER_BASE_URL}userinfo`, {
+        headers: {
+            "content-type": "application/json",
+            Authorization: userAuthorizationHeader
+        }
+    }); 
+
+    
+    const userInfo = await userInfoRes.json();
+    if(userInfo.sub !== undefined) {
+        userDataCache.set(userAuthorizationHeader, userInfo.sub);
+    }
+    return userInfo.sub;
 }
 
 // Return all metadata for boards owned by the user
 router.get("/", async (req, res) => {
-    const uid = getUserID();
+    const uid = await getUserID(req.headers.authorization!);
 
     const boards = await db.Board.find({ ownedBy: uid });
     
@@ -36,7 +52,6 @@ router.get("/", async (req, res) => {
             thumbnail: board.thumbnail
         } as BoardMetadata;
     });
-    
 
     res.send(metadata);
 });
@@ -52,7 +67,7 @@ router.post(
             return;
         }
 
-        const uid = getUserID();
+        const uid = await getUserID(req.headers.authorization!);
         
         const board = new db.Board({
             name: req.body.name,
@@ -85,13 +100,21 @@ router.get(
 router.put(
     "/:id",
     body("name").notEmpty().isString(),
-    body("description").notEmpty().isString(),
-    body("thumbnail").notEmpty().isString(),
+    // body("description").notEmpty().isString(), // TODO: re-enable these once validation is done
+    // body("thumbnail").notEmpty().isString(), // TODO: re-enable these once validation is done
     body("widgets").notEmpty().isArray(), // TODO: validate widgets
     async (req, res) => {
-        //throw new Error("Not implemented");
+        const validated = validationResult(req);
+        if (!validated.isEmpty()) {
+            res.status(400).send(validated);
+            return;
+        }
+
         const board = await db.Board.findByIdAndUpdate(
-            req.body._id,
+            {
+                _id: req.params?.id ?? "" ,
+                ownedBy: await getUserID(req.headers.authorization!)
+            },
             req.body
         );
         if (!board) {
@@ -106,8 +129,7 @@ router.put(
 router.delete(
     "/:id",
     async (req, res) => {
-        //throw new Error("Not implemented");
-        const board = db.Board.findByIdAndDelete(req.body._id);
+        const board = await db.Board.findByIdAndDelete(req.body._id);
         if (!board) {
             res.status(404).send("Board delete failed");
             return;

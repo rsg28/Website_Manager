@@ -4,26 +4,36 @@ services:
         restart: always
         command: npm run dev
         working_dir: /app
+        target: dev
         volumes:
         - ./backend:/app
         environment:
             PORT: 3000
             MONGO_CONNECTION_STRING: mongodb://root:password@db:27017/stormboard?authSource=admin
+            REACT_APP_AUTH0_AUDIENCE: https://h2rk2784-3000.usw2.devtunnels.ms/
+            AUTH0_ISSUER_BASE_URL: https://dev-datv3cnf7jn5ysok.us.auth0.com/
 
     frontend:
         build: frontend
         restart: always
-        command: react-scripts start
-        working_dir: /app
+        command: npm run dev
+        target: dev
+        working_dir: /app/frontend
         volumes:
-        - ./frontend:/app
+        - ./:/app
         environment:
             HOST: 0.0.0.0
+            REACT_APP_AUTH0_DOMAIN: dev-datv3cnf7jn5ysok.us.auth0.com
+            REACT_APP_AUTH0_CLIENT_ID: REd3U1UTVr639GXUanZWZnVd6RTqq1nm
+            REACT_APP_AUTH0_AUDIENCE: https://h2rk2784-3000.usw2.devtunnels.ms/
+            
     db:
         image: mongo
         restart: always
         ports:
         - 27017:27017
+        volumes:
+        - /tmp/stormboarddb:/data/db
         environment:
             MONGO_INITDB_ROOT_USERNAME: root
             MONGO_INITDB_ROOT_PASSWORD: password
