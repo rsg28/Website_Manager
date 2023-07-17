@@ -8,7 +8,7 @@
 All backend related code can be found in `/backend`.
 All frontend related code can be found in `/frontend`
 
-To start the development environment run `docker compose up` from the root folder.
+To start the development environment run `docker compose -f docker-compose-dev.yaml up` from the root folder.
 
 ### Description
 The previous command will start:
