@@ -10,6 +10,23 @@ export function CustomDrag(
     const [isDragging, setIsDragging] = React.useState(false);
     const [startingMousePosition, setStartingMousePosition] = React.useState({x: 0, y: 0});
     const [disablePointerEvents, setDisablePointerEvents] = React.useState(false);
+
+    React.useEffect(() => {
+        const handleScroll = () => {
+            if (isDragging) {
+                setIsDragging(false);
+                props.onEnd();
+                setDisablePointerEvents(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [isDragging, props]);
+
     return (<div
         className={props.className}
         style={{position: "absolute", top: props.currentPosition.y, left: props.currentPosition.x}}

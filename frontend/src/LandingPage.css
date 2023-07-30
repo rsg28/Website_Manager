@@ -1,10 +1,10 @@
 body {
-  background-color: #282c34;
-  background-image: url("data:image/svg+xml,%3Csvg width='12' height='24' viewBox='0 0 12 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23403939' fill-opacity='0.4'%3E%3Cpath d='M2 0h2v12H2V0zm1 20c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM9 8c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm-1 4h2v12H8V12z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background: #121214;
   margin: 0;
   font-family: "Belanosima", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
 }
 
 .landing-page {
@@ -19,10 +19,26 @@ body {
 
 #menuIcon {
   position: fixed;
-  top: 0px;
-  left: 20px;
+  top: -200px;
+  left: -70px;
   cursor: pointer;
   z-index: 1000; /* Ensure the icon is above other elements */
+  overflow: hidden; /* This will hide anything that goes outside the dimensions of the div */
+}
+
+.landing-page h1 {
+  font-family: "Lato", sans-serif;
+  font-size: 12em;
+  margin-top: 4em;
+  margin-bottom: 0em;
+  background: -webkit-linear-gradient(#eee, #333);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 6px 6px 0px rgba(0, 0, 0, 0.2);
+
+  display: block;
+  position: relative;
+  z-index: 3;
 }
 
 header {
@@ -56,7 +72,7 @@ header.show {
   display: flex;
   justify-content: center;
   margin-bottom: 2em;
-  justify-content: center; 
+  justify-content: center;
 }
 
 .button-box {
@@ -91,7 +107,8 @@ header.show {
   transition: color 0.4s ease;
   padding: 10px 20px;
   font-weight: bold;
-  text-align: center; 
+  text-align: center;
+  z-index: 10;
 }
 
 .button-box button:hover {
@@ -115,7 +132,6 @@ header.show {
   cursor: pointer;
 }
 
-
 main {
   text-align: center;
 }
@@ -125,6 +141,25 @@ header,
 .trending-boards {
   transition: opacity 2s ease-in-out;
   opacity: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.landing-page h2 {
+  font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
+  font-size: 8vw;
+  margin-top: 3em;
+  margin-bottom: 0em;
+  display: block;
+  position: absolute;
+  z-index: 3;
+  top: -300px;
+  left: 750px;
+  transform: translate(-50%, -50%);
+  color: #fafafa;
+  -webkit-text-stroke: 0.3vw #000412;
+  text-transform: uppercase;
 }
 
 .landing-page p.show,
@@ -133,21 +168,76 @@ header.show,
   opacity: 1;
 }
 
-.landing-page h1 {
-  font-family: "Ubuntu", sans-serif;
-  font-size: 12em;
-  margin-top: 4em;
+.landing-page p {
+  font-family: "Lato", sans-serif;
+  font-size: 1em;
+  margin-top: 0em;
   margin-bottom: 0em;
-  background: -webkit-linear-gradient(45deg, #061b38 30%, #7d98a1 90%);
+  background: -webkit-linear-gradient(#eee, #eee);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  text-shadow: 6px 6px 0px rgba(0, 0, 0, 0.2);
+
+  display: block;
+  position: relative;
+  z-index: 3;
+}
+
+@keyframes move-clouds-back {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 10000px 0;
+  }
+}
+
+@keyframes move-twinkle-back {
+  from {
+    background-position: 0, 0;
+  }
+  to {
+    background-position: -10000px 5000 px;
+  }
+}
+
+.stars,
+.twinkling,
+.clouds {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.stars {
+  background: #000 url(./resources/stars.png) repeat top center;
+  z-index: 0;
+}
+
+.twinkling {
+  background: transparent url(./resources/twinkling.png) repeat top center;
+  z-index: 1;
+  animation: move-twink-back 200s linear infinite;
+}
+
+.clouds {
+  background: transparent url(./resources/clouds.png) repeat top center;
+  z-index: 2;
+  opacity: 0.4;
+  animation: move-clouds-back 200s linear infinite;
 }
 
 .landing-page p {
-  font-size: 1.2em;
+  font-size: 1.1em;
   margin-bottom: 5em;
   transition: opacity 1.5s ease-in-out;
   opacity: 0;
+  z-index: 3;
 }
 
 .landing-page p.show {
@@ -155,94 +245,190 @@ header.show,
 }
 
 .trending-boards {
-  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  margin-top: 10em;
+  padding: 0;
   display: flex;
+  justify-content: center;
   flex-direction: column;
   align-items: center;
-  margin-top: 2em;
-  background-color: #4a5568;
-  padding: 20px;
-  font-family: "Ubuntu", sans-serif;
-}
-
-.trending-boards .Subtitle{
-  font-size: 3em;
-}
-
-.board-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between; /* This will add equal space between your boxes */
-  flex-wrap: wrap; /* This will allow the boxes to wrap to the next line if the container width is too small */
-}
-
-.board {
+  min-height: 100vh;
+  background: #121214;
+  z-index: 100;
   width: 100%;
+}
+
+/* .container {
+  position: absolute;
+  width: 100%;
+  height: 115vh;
+  overflow: hidden;
+}
+
+.particles {
+  position: absolute;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 80px; /* Decreased padding for better appearance */
-  border-radius: 10px;
-  
+  z-index: 1;
+  padding: 0 20px;
+  width: 100%;
+  height: 100%;
+  background: #09111d;
+}
+
+.particles span {
   position: relative;
-  margin: 1em 1em 1em 1em; /* top right bottom left */
-  cursor: pointer;
-  background-color: #2d3748;
+  bottom: 30px;
+  width: 100%;
+  height: 30px;
+  background: #4fc3dc;
+  box-shadow: 0 0 0 10px #4fc3dc44, 0 0 50px #4fc3dc, -100px 0 #4fc3dc99,
+    100px 0 #ff2d7599;
+  margin: 0 4px;
+  border-radius: 50%;
+  animation: animate 15s ease infinite;
+  animation-duration: calc(125s / var(--i));
 }
 
-@media (min-width: 768px) {
-  .board {
-    width: calc((100% / 3) - 2em);
+.particles span:nth-child(even) {
+  background: #ff2d75;
+  box-shadow: 0 0 0 10px #ff2d7544, 0 0 50px #ff2d75, -100px 0 #4fc3dc90,
+    100px 0 #4fc3dc99;
+}
+
+@keyframes animate {
+  0% {
+    transform: translateY(120vh) scale(0) rotate(0deg);
+  }
+  20% {
+    transform: translateY(100vh) scale(1) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-50vh) scale(0.5) rotate(360deg);
+  }
+} */
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  justify-items: center;
+  padding: 20px;
+  width: 80%;
+  margin: 0 auto;
+  z-index: 2;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 40px; /* Increase gap between grid items */
+  justify-items: stretch; /* Stretch items to fill the grid cell */
+  align-items: stretch; /* Stretch items vertically */
+  padding: 20px;
+  width: 80%;
+  margin: 0 auto;
+  z-index: 2;
+}
+
+.grid-item {
+  font-family: "Oswald", sans-serif;
+  color: #ffffff;
+  text-align: center;
+  line-height: 75px;
+  font-size: 30px;
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease-in-out;
+  padding: 20px;
+  display: flex;
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+  height: 100%;
+  position: relative;
+  background: repeating-conic-gradient(
+    from var(--a),
+    #073c40 0%,
+    #073c40 5%,
+    transparent 5%,
+    transparent 40%,
+    #073c40 50%
+  );
+  animation: boxanimate 4s linear infinite;
+  z-index: 1;
+}
+
+@property --a {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes boxanimate {
+  0% {
+    --a: 0deg;
+  }
+  100% {
+    --a: 360deg;
   }
 }
 
-.board h2 {
-  margin: 0;
-  font-family: "Ubuntu", sans-serif;
-}
-
-.board p {
-  margin: 0;
-}
-
-.board .author {
+.grid-item::before {
+  content: " ";
   position: absolute;
-  bottom: 0;
-  left: 0;
-  padding: 10px;
-  background-color: #4a5568;
-  color: #ed8936;
-  visibility: hidden;
-  opacity: 0;
-  transition: visibility 0s, opacity 0.5s linear;
+  width: 100%;
+  height: 100%;
+  background: repeating-conic-gradient(
+    from var(--a),
+    #2c0713 0%,
+    #2c0713 5%,
+    transparent 5%,
+    transparent 40%,
+    #2c0713 50%
+  );
+  animation: boxanimate 4s linear infinite;
+  animation-delay: -1s;
+  z-index: 1;
 }
 
-.board:hover .author {
-  visibility: visible;
-  opacity: 1;
+.boardTitle {
+  z-index: 2;
+  font-size: 2em;
+  font-weight: bold;
 }
 
-#logoIcon {
-  position: relative;
-  top: 1cm;
-  height: 90px; /* Adjust this value to change the size of the logo */
-  width: auto;
-  margin-left: 10px;
+.grid-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
-.see-more {
-  font-family: "Ubuntu", sans-serif;
-  font-size: 1em;
+
+.see-more-button {
+  display: block;
+  width: 200px;
+  height: 50px;
+  margin: 40px auto;
+  background-color: #4e9caf;
   color: #fff;
-  background-color: #4a5568;
+  border-radius: 5px;
   border: none;
-  padding: 10px 20px;
-  margin-top: 20px;
-  margin-left: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  float: right;
+  text-align: center;
+  box-shadow: 0px 5px 0px 0px #3e7c91;
+  transition: all 0.3s ease-in-out;
+  font-size: 20px;
+  z-index: 2;
 }
 
-.see-more:hover {
-  background-color: #2d3748;
+.see-more-button:hover {
+  background-color: #3e7c91;
+  box-shadow: 0px 5px 0px 0px #306772;
+  cursor: pointer;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.trending-title{
+  font-family: "Oswald", sans-serif;
 }

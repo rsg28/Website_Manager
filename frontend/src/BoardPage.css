@@ -1,23 +1,204 @@
-img {
-  width: 100px;
+#boardPagelogo {
+  position: absolute;
+  left: 80%;
+  top: -20%;
+  height: 340px; /* Adjust this value to change the size of the image */
+  width: auto;
+  margin-right: auto; /* Pushes the image to the left */
 }
 
-h1 {
+.Board-Page {
+  height: 350vh;
+}
+
+.title-input {
+  font-family: "Poppins", sans-serif;
+  font-size: 2em;
   color: aliceblue;
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 300px;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.save-button {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 20px;
+  font-size: 1em;
+  border: 1px solid white;
+  background: none;
+  color: white;
+  cursor: pointer;
+  transition: 0.8s;
+  top: 5%;
+  left: 46%;
+}
+.save-button:hover {
+  background: white;
+  color: black;
+}
+
+.inputBox {
+  position: absolute;
+  width: 250px;
+  left: 30px;
+  top: 18%;
+}
+
+.inputBox input {
+  width: 100%;
+  background: transparent;
+  color: #fff;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  font-size: 1em;
+  letter-spacing: 0.1em;
+  padding: 10px 0 5px;
+}
+
+.inputBox span {
+  position: absolute;
+  left: 0px;
+  padding: 10px 0 5px;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  pointer-events: none;
+  letter-spacing: 0.1em;
+  transition: 0.5s;
+  font-size: 1.5em;
+}
+
+.inputBox input:valid ~ span,
+.inputBox input:focus ~ span {
+  color: #2196f3;
+  transform: translateY(-16px);
+  font-size: 0.65em;
+}
+
+.container {
+  text-align: center;
+  margin-top: 360px;
+}
+.btn {
+  border: 1px solid white;
+  background: none;
+  padding: 10px 20px;
+  font-size: 20px;
+  font-family: "montserrat";
+  cursor: pointer;
+  margin: 10px;
+  transition: 0.8s;
+  position: absolute;
+  height: 40px;
+  font-weight: bold;
+  overflow: hidden;
+}
+.btn1 {
+  top: 17%;
+  left: 20%;
+  color: white;
+  border-radius: 15%;
+}
+.btn2 {
+  top: 17%;
+  left: 91%;
+  color: #fff;
+
+  width: 100px;
+  border-radius: 15%;
+}
+.btn1:hover,
+.btn2:hover {
+  color: black;
+  font-weight: bold;
+}
+
+.btn::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  background: white;
+  z-index: -1;
+  transition: 0.8s;
+}
+.btn1::before {
+  top: 0;
+  border-radius: 0 0 50% 50%;
+}
+.btn2::before,
+.btn4::before {
+  bottom: 0;
+  border-radius: 50% 50% 0 0;
+}
+.btn1:hover::before,
+.btn2:hover::before {
+  height: 180%;
+}
+
+.Middle {
+  position: absolute;
+  text-align: center;
+  left: 43%;
+  top: 33%;
+}
+
+.MoveDrag {
+  background: none;
+  border: 2px solid #fff;
+  font-family: "Poppins", sans-serif;
+  text-transform: uppercase;
+  padding: 12px 20px;
+  min-width: 200px;
+  cursor: pointer;
+  transition: color 0.4s linear;
+  color: white;
+}
+
+.MoveDrag:hover {
+  color: #000;
+}
+
+.MoveDrag::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  z-index: -1;
+  transition: transform 0.5s;
+  transform-origin: 0 0;
+  transition-timing-function: cubic-bezier(0.5, 1.6, 0.4, 0.7);
+  transform: scaleX(0);
+}
+
+.MoveDrag:hover::before {
+  transform: scaleX(1);
 }
 
 .whiteboard {
-  width: 100%;
-  height: calc(100vh - 175px); /* Adjust as needed */
+  width: 100%; /* Adjust as needed */
+  height: 300vh; /* Adjust as needed */
   border: 1px solid #000;
   position: relative; /* Needed for absolute positioning of children */
-  overflow: auto; /* Enable scrolling if content overflows */
-  background-color: white; /* Make the background white */
+  background-color: #121214;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%236f6e6f' fill-opacity='0.4'%3E%3Cpath fill-rule='evenodd' d='M11 0l5 20H6l5-20zm42 31a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM0 72h40v4H0v-4zm0-8h31v4H0v-4zm20-16h20v4H20v-4zM0 56h40v4H0v-4zm63-25a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm10 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM53 41a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm10 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm10 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-30 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-28-8a5 5 0 0 0-10 0h10zm10 0a5 5 0 0 1-10 0h10zM56 5a5 5 0 0 0-10 0h10zm10 0a5 5 0 0 1-10 0h10zm-3 46a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm10 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM21 0l5 20H16l5-20zm43 64v-4h-4v4h-4v4h4v4h4v-4h4v-4h-4zM36 13h4v4h-4v-4zm4 4h4v4h-4v-4zm-4 4h4v4h-4v-4zm8-8h4v4h-4v-4z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.loadMessage {
+  left: 48%;
 }
 
 .draggable-element {
   width: 500px; /* Adjust as needed */
-  height: 500px; /* Adjust as needed */
+  height: 200px; /* Adjust as needed */
   border: 1px solid #000;
   position: absolute; /* Allow the element to be positioned anywhere in the whiteboard */
   cursor: move; /* Change the cursor to indicate the element is movable */
